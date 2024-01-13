@@ -21,7 +21,8 @@ const generateText = async(input: string, stop: string[]) => {
                 temperature: 1.15,
                 top_k: 200,
                 repetition_penalty: 1.1,
-                use_cache: false,
+                // @ts-ignore
+                use_cache: false,   //This is VITAL but not recognized on the hf type
             }
         })
 

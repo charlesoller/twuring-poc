@@ -10,13 +10,13 @@ import {
 } from "react-router-dom"
 
 import {
-  ChakraBaseProvider,
-  extendBaseTheme,
-  theme as chakraTheme,
+  // ChakraBaseProvider,
+  // extendBaseTheme,
+  // theme as chakraTheme,
   ChakraProvider
 } from '@chakra-ui/react'
 
-const { Tooltip, Modal } = chakraTheme.components
+// const { Tooltip, Modal } = chakraTheme.components
 
 const router = createBrowserRouter([
   {

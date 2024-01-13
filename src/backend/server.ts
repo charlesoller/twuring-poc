@@ -1,5 +1,5 @@
 // Imports
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { Post, Twur } from "./models/models.ts";
 import cors from "cors"
@@ -16,13 +16,14 @@ mongoose.connect(dbURI)
   .catch((err) => console.error(err.message))
 
 // Middleware
+// I definitely have to clean up all of this middleware
 app.options("*", cors())
 app.use(cors())
 
 app.use(express.static("public"))
 app.use(express.json())
 
-app.use(function(req, res, next) {
+app.use(function(_, res: Response, next: NextFunction) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, OPTIONS")

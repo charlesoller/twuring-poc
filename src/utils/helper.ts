@@ -19,6 +19,7 @@ export const parseToObject = (str: string) => {
 }
 
 export const refreshPage = () => {
+  // @ts-ignore
   window.location.reload(false)
 }
 
@@ -47,11 +48,12 @@ export const uploadFile = async(file: File) => {
     .putObject(params)
     .on("httpUploadProgress", (evt) => {
       console.log(
+        // @ts-ignore
         "Uploading " + parseInt((evt.loaded * 100) / evt.total) + "%"
       );
     })
     .promise();
-  await upload.then((err, data) => {
+  await upload.then((err: any) => {
     console.log(err);
     console.log("File uploaded successfully.");
   });

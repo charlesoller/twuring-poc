@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import {
     FormControl,
     FormLabel,
-    FormErrorMessage,
+    // FormErrorMessage,
     FormHelperText,
     Input,
     Textarea
@@ -18,12 +18,12 @@ type Inputs = {
     appearance: string,
 }
 
-export function CreateTwurForm({ close }){
+export function CreateTwurForm({ close }: { close: Function }){
     const {
         register,
         handleSubmit,
-        watch,
-        formState: { errors },
+        // watch,
+        // formState: { errors },
     } = useForm<Inputs>()
 
     const onSubmit: SubmitHandler<Inputs> = async(data) => {

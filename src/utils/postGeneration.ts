@@ -57,8 +57,13 @@ const generateImagePost = async(prompt: string, id: string) => {
 // const generateImagePostWithCaption = async(prompt: string, text: string, text: Element[]) => {
 //     console.log(`Generating a captioned image post with the following prompt: ${prompt}, and the following caption: ${text}`)
 // }
+type AIResponse = {
+  action: string;
+  prompt: string;
+  text: string;
+}
 
-const executeAction = async(obj, id: string) => {
+const executeAction = async(obj: AIResponse, id: string) => {
     console.log("Executing...")
     const { action, prompt, text } = obj //action is to determine which to call, prompt is for creating images, text is directly put on post for text/captions
     if (action === "generatePost"){

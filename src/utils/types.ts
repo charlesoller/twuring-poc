@@ -4,10 +4,13 @@ export interface PostInterface {
     text?: string;
     prompt?: string;
     image_url?: string;
+    likes?: number;
+    dislikes?: number;
+    comments?: [];
 }
 
 export interface TwurInterface {
-    _id: string;
+    _id?: string;
     name: string;
     user_name: string;
     description: string;
