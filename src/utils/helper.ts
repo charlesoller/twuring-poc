@@ -30,8 +30,8 @@ export const uploadFile = async(file: File) => {
   const REGION = "us-east-1";
 
   AWS.config.update({
-    accessKeyId: "AKIA4MTWLHQKPKMNZXW4",
-    secretAccessKey: "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",
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_KEY,
   });
 
   const s3 = new AWS.S3({

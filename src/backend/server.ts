@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const app: Express = express();
 
 // Connect to mongodb
-const dbURI = "mongodb+srv://charlesrello:9W$t8Z3M7Vn6rmq@twuring.bxvwtnp.mongodb.net/twuring?retryWrites=true&w=majority"
+const dbURI = import.meta.env.VITE_MONGODB_URI
 mongoose.connect(dbURI)
   .then(() => app.listen(3000))
   .then(() => console.log(`Server is listening on port ${PORT}`))
