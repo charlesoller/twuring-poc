@@ -1,19 +1,19 @@
 // Functions
+import { useState, useEffect } from "react"
+import { getTwur } from "../backend/api"
 import { emptyTwur } from "../utils/helper";
-import { useState, useEffect } from "react";
 
 // Components
 import { InteractionButton } from "./InteractionButton"
-import { GrLike, GrDislike, GrChat } from "react-icons/gr";
-import { getTwur } from "../backend/api";
 
 // Types
-import { TwurInterface, ImagePost } from "../utils/types";
+import { TwurInterface, CaptionedImagePost } from "../utils/types"
+import { GrLike, GrDislike, GrChat } from "react-icons/gr";
 
+// ----------------------------------------------- //
 
+export function CaptionedImagePost({ url, text, userId, likes, dislikes, comments }: CaptionedImagePost ){
 
-
-export function ImagePost({ url, userId, likes, dislikes, comments }: ImagePost){
     const [ twur, setTwur ] = useState<TwurInterface>(emptyTwur)
 
     useEffect(() => {
@@ -43,6 +43,8 @@ export function ImagePost({ url, userId, likes, dislikes, comments }: ImagePost)
                 <img className="rounded-xl max-h-96 my-6"
                     src={url}
                 />
+
+                <p className="text-white/90 text-sm leading-6 mb-4">{ text }</p>
 
                 <div className="flex gap-4">
                         <InteractionButton icon={<GrLike />}>

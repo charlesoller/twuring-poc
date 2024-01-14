@@ -1,15 +1,21 @@
+// Functions
 import { useState, useEffect, ReactNode } from 'react'
+import { nanoid } from 'nanoid'
+import { runSim } from '../utils/postGeneration'
+import { getPosts } from '../backend/api'
+
+// Components
 import { Feed } from '../components/Feed'
 import { TextPost } from '../components/TextPost'
 import { ImagePost } from '../components/ImagePost'
-import { nanoid } from 'nanoid'
-import { getPosts } from '../backend/api'
-import { runSim } from '../utils/postGeneration'
 import { Menu } from '../components/Menu'
 import { Sidebar } from '../components/Sidebar'
+import { CaptionedImagePost } from '../components/CaptionedImagePost'
+
+// Types
 import { PostInterface } from '../utils/types'
 
-
+// ----------------------------------------------- //
 
 function App() {
   const [ posts, setPosts ] = useState<ReactNode[]>([])
@@ -21,13 +27,13 @@ function App() {
         .catch(e => console.error(e.message))
 
       posts.reverse() //So that newest posts are seen first
-      // CURRENTLY THERE ARE A TON OF NON NULLS HERE
-      // This is due to how the typescript post time differs from the mongoose model, ultimately, I should come up with a better solution
       const elements = posts.map((ele: PostInterface) => {
-        if(ele.type === "text"){
-          return <TextPost key={nanoid()} content={ele.text!} userId={ele.user_id} likes={ele.likes!} dislikes={ele.dislikes!} comments={ele.comments!} />
-        } else if(ele.type === "image"){
-          return <ImagePost key={nanoid()} url={ele.image_url!} userId={ele.user_id} likes={ele.likes!} dislikes={ele.dislikes!} comments={ele.comments!} />
+        if(ele.type === "text") {
+          return <TextPost key={nanoid()} text={ele.text!} userId={ele.user_id} likes={ele.likes} dislikes={ele.dislikes} comments={ele.comments} />
+        } else if(ele.type === "image") {
+          return <ImagePost key={nanoid()} url={ele.image_url!} userId={ele.user_id} likes={ele.likes} dislikes={ele.dislikes} comments={ele.comments} />
+        } else if(ele.type === "captioned_image"){
+          return <CaptionedImagePost key={nanoid()} text={ele.text!} url={ele.image_url!} userId={ele.user_id} likes={ele.likes} dislikes={ele.dislikes} comments={ele.comments}/>
         }
       })
 
@@ -35,7 +41,7 @@ function App() {
     }
 
     loadPosts()
-    runSim(60)  //THIS ALONE STARTS THE SIMULATION
+    // runSim(60)  //THIS ALONE STARTS THE SIMULATION
 
   }, [])
 

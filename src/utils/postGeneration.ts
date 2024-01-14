@@ -1,49 +1,56 @@
-import { createPostImageFileFromBlob, generateImage } from "./imageGeneration"
+// Functions
+import { generateImage } from "./imageGeneration"
 import { createPost } from "../backend/api"
-// import { kikoAnimations, chucklesMcFunnyBone } from "./prompting/personalities"
 import { commands } from "./commands"
-import { getRandomIndex, parseToObject, refreshPage, uploadFile } from "./helper"
+import { getRandomIndex, parseToObject, refreshPage, uploadFile, createPostImageFileFromBlob } from "./helper"
 import { processCommand } from "./textGeneration"
 import { getTwurs } from "../backend/api"
 import { createInstructions } from "./prompting/createInstructions"
-
 import { nanoid } from "nanoid"
+import { timeout } from "./helper"
 
+// Types
+import { AIResponse, TwurInterface } from "./types"
 
-const generateTextPost = async(text: string, id: string): Promise<object> => {
+// ----------------------------------------------- //
+
+const generateTextPost = async(text: string, user_id: string): Promise<object> => {
     console.log(`Generating a text post with the following text: ${text}`)
-    const obj = {
-      "user_id": id,
+
+    // Formatting for upload to DB
+    const data = {
       "type": "text",
-      "text": text
+      user_id,
+      text
     }
+
     try {
-      const res = await createPost(obj)
+      const res = await createPost(data)
       return res
     } catch (e: any) {
       throw new Error(e.message)
     }
   }
 
-const generateImagePost = async(prompt: string, id: string) => {
+const generateImagePost = async(prompt: string, user_id: string): Promise<object> => {
     console.log(`Generating an image post with the following prompt: ${prompt}`)
 
     try {
       const blob = await generateImage(prompt)
-      // Currently nanoid is being used so that there isn't url overlap to solve the repeating images issue, but somehow I should really be prefetching the object id
       const file = createPostImageFileFromBlob(blob, nanoid())
-      const path = `https://twuring.s3.amazonaws.com/${file.name}`
+      const image_url = `https://twuring.s3.amazonaws.com/${user_id}/${file.name}`
       try {
         await uploadFile(file)
 
-        const obj = {
-          "user_id": id,
+        // Formatting for upload to DB
+        const data = {
           "type": "image",
-          "prompt": prompt,
-          "image_url": path
+          user_id,
+          prompt,
+          image_url
         }
 
-        const res = await createPost(obj)
+        const res = await createPost(data)
         return res
 
       } catch (e: any) {
@@ -54,47 +61,72 @@ const generateImagePost = async(prompt: string, id: string) => {
     }
 }
 
-// const generateImagePostWithCaption = async(prompt: string, text: string, text: Element[]) => {
-//     console.log(`Generating a captioned image post with the following prompt: ${prompt}, and the following caption: ${text}`)
-// }
-type AIResponse = {
-  action: string;
-  prompt: string;
-  text: string;
+const generateCaptionedImagePost = async(prompt: string, text: string, user_id: string): Promise<object> => {
+  console.log(`Generating a captioned image post with the following caption: ${text} using the following prompt: ${prompt}`)
+
+  try {
+    const blob = await generateImage(prompt)
+    // Currently nanoid is being used so that there isn't url overlap to solve the repeating images issue, but somehow I should really be prefetching the object id
+    const file = createPostImageFileFromBlob(blob, nanoid())
+    const image_url = `https://twuring.s3.amazonaws.com/${user_id}/${file.name}`
+
+    try {
+      await uploadFile(file)
+
+      // Formatting for upload to DB
+      const data = {
+        "type": "captioned_image",
+        user_id,
+        text,
+        prompt,
+        image_url
+      }
+
+      const res = await createPost(data)
+      return res
+
+    } catch (e: any) {
+      throw new Error(e.message)
+    }
+  } catch (e: any) {
+    throw new Error(e.message)
+  }
 }
 
-const executeAction = async(obj: AIResponse, id: string) => {
+const determineAction = async(obj: AIResponse, id: string): Promise<object> => {
+    // Determines what action should be taken given the input
     console.log("Executing...")
     const { action, prompt, text } = obj //action is to determine which to call, prompt is for creating images, text is directly put on post for text/captions
     if (action === "generatePost"){
       return await generateTextPost(text, id)
     } else if (action === "generateImagePost"){
       return await generateImagePost(prompt, id)
+    } else if (action === "generateCaptionedImagePost"){
+      return await generateCaptionedImagePost(prompt, text, id)
     } else {
-      throw new Error("Invalid action.")
+      throw new Error("Invalid Action.")
     }
-
-
-    // else if (action == "generateImagePostWithCaption"){
-    //   return await generateImagePostWithCaption(prompt, text)
-    // }
 }
 
-const executePost = async(instructions: string, command: string, id: string) => {
+const executePost = async(instructions: string, command: string, id: string): Promise<undefined> => {
+
   const output = await processCommand(instructions, command);
 
   try {
-    const obj = parseToObject(output) // { action: ...., text: .... }
-    await executeAction(obj, id)
-    refreshPage()
+    const obj = parseToObject(output) // returns obj in format: { action: ...., text?: ...., prompt?: .... }
+    await determineAction(obj, id)
+    refreshPage() //This is purely for dev purposes, in production the page should NOT refresh after each post
   } catch (e: any) {
     throw new Error(e.message)
   }
 }
 
-const timeout = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-export const runSim = async(delay: number) => {
+export const runSim = async(delay: number): Promise<undefined> => {
+  // This is the function in charge of running the simulation
+  // Takes in a delay in seconds and recursively calls itself with delay interval
+  // Each run, it will randomly pick one Twur to make a post
+
   const delayInMs = delay * 1000
 
   try {
@@ -110,9 +142,9 @@ export const runSim = async(delay: number) => {
   runSim(delay)
 }
 
-const getRandomTwur = async() => {
+const getRandomTwur = async(): Promise<TwurInterface> => {
+  // Fetches all Twurs from DB and returns one at random
   const twurs = await getTwurs()
-  console.log(twurs)
   const ind = getRandomIndex(twurs)
   return twurs[ind]
 }

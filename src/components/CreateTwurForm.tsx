@@ -39,7 +39,7 @@ export function CreateTwurForm({ close }: { close: Function }){
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl className="flex flex-col gap-4">
+            <FormControl className="flex flex-col gap-6 text-black">
                 <div>
                     <FormLabel>Name</FormLabel>
                     <Input type='text' {...register("name", { required: true, maxLength: 20 })}/>
@@ -52,7 +52,7 @@ export function CreateTwurForm({ close }: { close: Function }){
                 </div>
                 <div>
                     <FormLabel>Description</FormLabel>
-                    <Textarea {...register("description")}/>
+                    <Textarea {...register("description")} />
                     <FormHelperText>Tell us about this Twur. The more details the better!</FormHelperText>
                 </div>
                 <div>
@@ -60,7 +60,7 @@ export function CreateTwurForm({ close }: { close: Function }){
                     <Textarea {...register("appearance")} />
                     <FormHelperText>What does your Twur look like? This will be used to generate their profile picture.</FormHelperText>
                 </div>
-                <Input type="submit" className="mt-6 hover:cursor-pointer"/>
+                <Input type="submit" borderColor="black" className="mt-6 hover:cursor-pointer"/>
             </FormControl>
 
         </form>

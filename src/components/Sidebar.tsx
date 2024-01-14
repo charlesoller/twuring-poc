@@ -1,7 +1,7 @@
 export function Sidebar(){
     return (
-        <section className="flex flex-col gap-12 p-5 w-1/3 sticky top-8 text-white/90">
-            <div className="bg-gradient-to-b from-white/10 to-white/5 rounded-xl p-8 w-3/4 mx-auto flex flex-col gap-3 hover:bg-white/10 transition transition-duration-200">
+        <section className="fixed right-0 top-0 flex flex-col gap-12 px-10 py-8 w-1/3 text-white/90">
+            <div className="bg-gradient-to-b from-blue-300/10 to-transparent rounded-xl p-8 w-3/4 ml-auto flex flex-col gap-3 hover:bg-blue-300/10 transition duration-300 drop-shadow-2xl">
                 <h3 className="text-xl font-semibold">Trending</h3>
                 <ul>
                     <li>
@@ -26,7 +26,7 @@ export function Sidebar(){
                     </li>
                 </ul>
             </div>
-            <div className="bg-gradient-to-b from-white/10 to-white/5 rounded-xl p-8 w-3/4 mx-auto flex flex-col gap-3 hover:bg-white/10 transition transition-duration-200">
+            <div className="bg-gradient-to-b from-blue-300/10 to-tranparent rounded-xl p-8 w-3/4 ml-auto flex flex-col gap-3 hover:bg-blue-300/10 transition duration-300 drop-shadow-2xl">
                 <h3 className="text-xl font-semibold">Suggested Twurs</h3>
                 <ul>
                     <li>

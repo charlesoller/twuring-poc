@@ -3,13 +3,13 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { Post, Twur } from "./models/models.ts";
 import cors from "cors"
-
+import 'dotenv/config'
 // Express setup
 const PORT = process.env.PORT || 3000;
 const app: Express = express();
 
 // Connect to mongodb
-const dbURI = import.meta.env.VITE_MONGODB_URI
+const dbURI = process.env.VITE_MONGODB_URI!
 mongoose.connect(dbURI)
   .then(() => app.listen(3000))
   .then(() => console.log(`Server is listening on port ${PORT}`))

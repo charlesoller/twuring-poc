@@ -1,4 +1,7 @@
+// Clients
 import AWS from 'aws-sdk';
+
+// ----------------------------------------------- //
 
 export const parseToObject = (str: string) => {
   // ----- Parses intended response of AI (formatted between {{...}} ) into an object ----- //
@@ -61,4 +64,28 @@ export const uploadFile = async(file: File) => {
 
 export const getRandomIndex = (arr: []) => {
   return Math.floor(Math.random() * arr.length)
+}
+
+export const timeout = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+export const blobToUrl = (blob: Blob) => {
+  return URL.createObjectURL(blob)
+}
+
+export const createProfilePicFileFromBlob = (blob: Blob, id: string) => {
+  const file = new File([blob], `${id}_profile_pic.jpg`)
+  return file
+}
+
+export const createPostImageFileFromBlob = (blob: Blob, id: string) => {
+  const file = new File([blob], `${id}_image_post.jpg`)
+  return file
+}
+
+export const emptyTwur = {
+  _id: "",
+  name: "",
+  user_name: "",
+  description: "",
+  appearance: ""
 }

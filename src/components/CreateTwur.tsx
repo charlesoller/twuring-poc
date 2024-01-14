@@ -17,7 +17,7 @@ export function CreateTwur(){
 
     return (
         <>
-            <button className="flex items-center gap-3 p-4 text-white/80 hover:bg-gradient-to-r hover:from-white/10 hover:to-transparent rounded-xl transition transition-duration-200"
+            <button className="flex items-center gap-3 p-4 text-white/80 bg-gradient-to-r from-blue-800 to-blue-600 hover:scale-105 rounded-xl transition duration-200 drop-shadow-2xl"
                 onClick={onOpen}
             >
                 <GrUserAdd className="w-5 h-5" />
@@ -27,8 +27,8 @@ export function CreateTwur(){
             </button>
 
             <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
-                <ModalOverlay backdropFilter='blur(10px)' />
-                <ModalContent className="bg-red-500" bg="darkgray">
+                <ModalOverlay backdropFilter='blur(10px)' bg='blackAlpha.300'/>
+                <ModalContent bg="rgba(31, 41, 55, 1)">
                     <ModalHeader>Create a Twur</ModalHeader>
                     <ModalCloseButton m={1} />
                     <ModalBody>

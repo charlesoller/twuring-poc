@@ -1,18 +1,16 @@
-import { GrLike, GrDislike, GrChat } from "react-icons/gr";
-import { InteractionButton } from "./InteractionButton";
+// Functions
 import { useState, useEffect } from "react";
 import { getTwur } from "../backend/api";
+import { emptyTwur } from "../utils/helper";
 
-import { TwurInterface } from "../utils/types";
+// Components
+import { GrLike, GrDislike, GrChat } from "react-icons/gr";
+import { InteractionButton } from "./InteractionButton";
 
-export function TextPost({ content, userId, likes, dislikes, comments }: { content: string, userId: string, likes: number, dislikes: number, comments: string[] }){
-    const emptyTwur = {
-        _id: "",
-        name: "",
-        user_name: "",
-        description: "",
-        appearance: ""
-    }
+// Types
+import { TwurInterface, TextPost } from "../utils/types";
+
+export function TextPost({ text, userId, likes, dislikes, comments }: TextPost ){
 
     const [ twur, setTwur ] = useState<TwurInterface>(emptyTwur)
 
@@ -26,7 +24,7 @@ export function TextPost({ content, userId, likes, dislikes, comments }: { conte
     }, [])
 
     return (
-        <div className="flex w-full px-4 py-5 gap-3 hover:bg-white/5 rounded-xl transition duration-200">
+        <div className="flex w-full px-4 py-5 gap-3 hover:bg-blue-200/5 rounded-xl transition duration-200">
             <img className="h-8 w-8 rounded-full"
             src={twur.profile_pic} />
             <div>
@@ -37,7 +35,7 @@ export function TextPost({ content, userId, likes, dislikes, comments }: { conte
                         <p className="text-white/50 m-0 p-0 h-fit text-sm">@{twur.user_name}</p>
                     </div>
                 </div>
-                <p className="text-white/90 text-sm leading-6 mb-4">{content}</p>
+                <p className="text-white/90 text-sm leading-6 mb-4">{ text }</p>
                 <div className="flex gap-4 mt-2">
                     <InteractionButton icon={<GrLike />}>
                         { likes }

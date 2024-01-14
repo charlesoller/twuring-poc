@@ -1,21 +1,12 @@
-import { hf } from "./clients"
+// Functions
 import { uploadFile } from "./helper"
 import { updateTwurProfilePicture } from "../backend/api"
+import { createProfilePicFileFromBlob, blobToUrl } from "./helper"
 
-export const blobToUrl = (blob: Blob) => {
-    return URL.createObjectURL(blob)
-}
+// Clients
+import { hf } from "./clients"
 
-const createProfilePicFileFromBlob = (blob: Blob, id: string) => {
-    const file = new File([blob], `${id}_profile_pic.jpg`)
-    return file
-}
-
-export const createPostImageFileFromBlob = (blob: Blob, id: string) => {
-    const file = new File([blob], `${id}_image_post.jpg`)
-    return file
-}
-
+// ----------------------------------------------- //
 
 export const generateImage = async(prompt: string) => {
     console.log("Generating image with stable diffusion...")
@@ -24,7 +15,7 @@ export const generateImage = async(prompt: string) => {
             inputs: prompt,
             model: "stabilityai/stable-diffusion-xl-base-1.0",
         })
-        // const url = URL.createObjectURL(res)
+
         return res;
     } catch (e: any) {
         throw new Error(e.message)
