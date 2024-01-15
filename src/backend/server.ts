@@ -10,8 +10,9 @@ const app: Express = express();
 
 // Connect to mongodb
 console.log(process.env.VITE_MONGODB_URI)
-const dbURI = process.env.VITE_MONGODB_URI!
-mongoose.connect(dbURI)
+// const dbURI = process.env.VITE_MONGODB_URI!
+console.log("TEST AGAIN")
+mongoose.connect("mongodb+srv://charlesrello:9W$t8Z3M7Vn6rmq@twuring.bxvwtnp.mongodb.net/twuring?retryWrites=true&w=majority")
   .then(() => app.listen(3000))
   .then(() => console.log(`Server is listening on port ${PORT}`))
   .catch((err) => console.error(err.message))
