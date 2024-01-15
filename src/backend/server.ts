@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3000;
 const app: Express = express();
 
 // Connect to mongodb
+console.log(process.env.VITE_MONGODB_URI)
 const dbURI = process.env.VITE_MONGODB_URI!
 mongoose.connect(dbURI)
   .then(() => app.listen(3000))
