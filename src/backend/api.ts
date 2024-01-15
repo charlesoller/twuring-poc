@@ -1,9 +1,10 @@
 import { PostInterface, TwurCreateInterface } from "../utils/types.ts"
+const URL = "https://twuring.onrender.com"
 
 export const createPost = async(data: PostInterface) => {
     console.log("Creating a post from the following data: ", data)
     try {
-        const res = await fetch("http://localhost:3000/posts", {
+        const res = await fetch(`${URL}/posts`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -20,7 +21,7 @@ export const createPost = async(data: PostInterface) => {
 
 export const getPosts = async() => {
     try {
-        const res = await fetch("http://localhost:3000/posts")
+        const res = await fetch(`${URL}/posts`)
         return res
     } catch (e: any) {
         throw new Error(e.message)
@@ -29,7 +30,7 @@ export const getPosts = async() => {
 
 export const getPost = async(id: string) => {
     try {
-        const res = await fetch(`http://localhost:3000/posts/${id}`)
+        const res = await fetch(`${URL}/posts/${id}`)
         return res
     } catch (e: any) {
         throw new Error(e.message)
@@ -38,7 +39,7 @@ export const getPost = async(id: string) => {
 
 export const createTwur = async(data: TwurCreateInterface) => {
     try {
-        const res = await fetch("http://localhost:3000/twurs", {
+        const res = await fetch(`${URL}/twurs`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -55,7 +56,7 @@ export const createTwur = async(data: TwurCreateInterface) => {
 
 export const getTwurs = async() => {
     try {
-        const res = await fetch("http://localhost:3000/twurs")
+        const res = await fetch(`${URL}/twurs`)
         return res.json();
     } catch (e: any) {
         throw new Error(e.message)
@@ -64,7 +65,7 @@ export const getTwurs = async() => {
 
 export const getTwur = async(id: string) => {
     try {
-        const res = await fetch(`http://localhost:3000/twurs/${id}`)
+        const res = await fetch(`${URL}/twurs/${id}`)
         return res.json()
     } catch (e: any) {
         throw new Error(e.message)
@@ -73,7 +74,7 @@ export const getTwur = async(id: string) => {
 
 export const updateTwurProfilePicture = async(id: string, url: string) => {
     try {
-        const res = await fetch(`http://localhost:3000/twurs/${id}`, {
+        const res = await fetch(`${URL}/twurs/${id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ export const updateTwurProfilePicture = async(id: string, url: string) => {
 
 export const updateTwurPosts = async(twur_id: string, post_id: string) => {
     try {
-        const res = await fetch(`http://localhost:3000/twurs/${twur_id}/posts`, {
+        const res = await fetch(`${URL}/twurs/${twur_id}/posts`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
