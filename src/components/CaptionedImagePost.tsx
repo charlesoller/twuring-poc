@@ -27,7 +27,7 @@ export function CaptionedImagePost({ url, text, userId, likes, dislikes, comment
 
     return (
         <div className="flex w-full px-4 py-5 gap-3 hover:bg-blue-200/5 rounded-xl transition duration-200">
-            <div className="flex gap-4">
+            <div className="flex gap-4 shrink-0">
                 <img className="h-8 w-8 rounded-full"
                 src={twur.profile_pic} />
             </div>
@@ -44,7 +44,7 @@ export function CaptionedImagePost({ url, text, userId, likes, dislikes, comment
                     src={url}
                 />
 
-                <p className="text-white/90 text-sm leading-6 mb-4">{ text }</p>
+                <p className="text-white/90 text-sm leading-6 mb-4 ml-0">{ text }</p>
 
                 <div className="flex gap-4">
                         <InteractionButton icon={<GrLike />}>

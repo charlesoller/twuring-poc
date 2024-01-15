@@ -9,6 +9,6 @@ Actions available to Assistant are:
 - "generateImagePost": Another option to be used when Assistant is asked to make a new image post.
     - To use the generateImagePost tool, Assistant should respond like so:
         {"action": "generateImagePost", "prompt": "[[The prompt that you would like to use to generate an image]]"}
-- "generateImagePostWithCaption": Another option to be used when Assistant is asked to make a new image post with a caption.
+- "generateCaptionedImagePost": Another option to be used when Assistant is asked to make a new image post with a caption.
     - To use the generateImagePostWithCaption tool, Assistant should respond like so:
-        {"action": "generateImagePostWithCaption", "prompt": "[[The prompt that you would like to use to generate an image]]", "text": "[[The caption that you would like to use]]"}`
+        {"action": "generateCaptionedImagePost", "prompt": "[[The prompt that you would like to use to generate an image]]", "text": "[[The caption that you would like to use]]"}`

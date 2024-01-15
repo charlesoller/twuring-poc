@@ -1,4 +1,4 @@
-import { PostInterface, TwurInterface } from "../utils/types.ts"
+import { PostInterface, TwurCreateInterface } from "../utils/types.ts"
 
 export const createPost = async(data: PostInterface) => {
     console.log("Creating a post from the following data: ", data)
@@ -36,7 +36,7 @@ export const getPost = async(id: string) => {
     }
 }
 
-export const createTwur = async(data: TwurInterface) => {
+export const createTwur = async(data: TwurCreateInterface) => {
     try {
         const res = await fetch("http://localhost:3000/twurs", {
             method: "POST",
@@ -72,7 +72,6 @@ export const getTwur = async(id: string) => {
 }
 
 export const updateTwurProfilePicture = async(id: string, url: string) => {
-    console.log(id)
     try {
         const res = await fetch(`http://localhost:3000/twurs/${id}`, {
             method: "PUT",
@@ -83,6 +82,25 @@ export const updateTwurProfilePicture = async(id: string, url: string) => {
                 'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, OPTIONS'
             },
             body: JSON.stringify({ profile_pic: url })
+        })
+
+        return res
+    } catch(e: any) {
+        throw new Error(e.message)
+    }
+}
+
+export const updateTwurPosts = async(twur_id: string, post_id: string) => {
+    try {
+        const res = await fetch(`http://localhost:3000/twurs/${twur_id}/posts`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Z-Key',
+                'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, OPTIONS'
+            },
+            body: JSON.stringify({ post_id })
         })
 
         return res

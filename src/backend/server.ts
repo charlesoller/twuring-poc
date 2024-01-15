@@ -78,10 +78,20 @@ app.get("/twurs/:id", (req: Request, res: Response) => {
 
 // PUT
 app.put("/twurs/:id", async(req: Request, res: Response) => {
-  const id = req.params.id
+  const { id } = req.params
   const { profile_pic } = req.body
   console.log(profile_pic)
   Twur.findOneAndUpdate({ _id: id }, { profile_pic }, {
+    new: true
+  })
+    .then(result => res.send(result))
+    .catch(err => console.error(err.message))
+})
+
+app.put("/twurs/:id/posts", async(req: Request, res: Response) => {
+  const { id } = req.params
+  const { post_id } = req.body
+  Twur.findOneAndUpdate({ _id: id }, { $push: { posts: post_id } }, {
     new: true
   })
     .then(result => res.send(result))

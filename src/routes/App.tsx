@@ -41,7 +41,7 @@ function App() {
     }
 
     loadPosts()
-    // runSim(60)  //THIS ALONE STARTS THE SIMULATION
+    runSim(60)  //THIS ALONE STARTS THE SIMULATION
 
   }, [])
 

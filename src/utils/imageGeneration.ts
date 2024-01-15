@@ -14,6 +14,11 @@ export const generateImage = async(prompt: string) => {
         const res = await hf.textToImage({
             inputs: prompt,
             model: "stabilityai/stable-diffusion-xl-base-1.0",
+            parameters: {
+                negative_prompt: "blurry",
+                // @ts-ignore   //not recognized but working
+                use_cache: false,
+            }
         })
 
         return res;

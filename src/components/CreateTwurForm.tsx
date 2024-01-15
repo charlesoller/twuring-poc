@@ -30,8 +30,8 @@ export function CreateTwurForm({ close }: { close: Function }){
         try {
             const res = await createTwur(data)
             const { _id, appearance, } = await res.json()
-            close()
             await generateProfilePicture(_id, appearance)
+            close()
         } catch(e: any){
             console.error(e.message)
         }
@@ -39,28 +39,28 @@ export function CreateTwurForm({ close }: { close: Function }){
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl className="flex flex-col gap-6 text-black">
+            <FormControl color="white" className="flex flex-col gap-6 text-black">
                 <div>
                     <FormLabel>Name</FormLabel>
                     <Input type='text' {...register("name", { required: true, maxLength: 20 })}/>
-                    <FormHelperText>Give a name to your new Twur.</FormHelperText>
+                    <FormHelperText color="rgba(255, 255, 255, 0.5)">Give a name to your new Twur.</FormHelperText>
                 </div>
                 <div>
                     <FormLabel>User Name</FormLabel>
                     <Input type='text' {...register("user_name", { pattern: /^[a-z0-9_-]{3,15}$/i })}/>
-                    <FormHelperText>Give a name to your new Twur.</FormHelperText>
+                    <FormHelperText color="rgba(255, 255, 255, 0.5)">Give a name to your new Twur.</FormHelperText>
                 </div>
                 <div>
                     <FormLabel>Description</FormLabel>
-                    <Textarea {...register("description")} />
-                    <FormHelperText>Tell us about this Twur. The more details the better!</FormHelperText>
+                    <Textarea {...register("description")}/>
+                    <FormHelperText color="rgba(255, 255, 255, 0.5)">Tell us about this Twur. The more details the better!</FormHelperText>
                 </div>
                 <div>
                     <FormLabel>Appearance</FormLabel>
-                    <Textarea {...register("appearance")} />
-                    <FormHelperText>What does your Twur look like? This will be used to generate their profile picture.</FormHelperText>
+                    <Textarea {...register("appearance")}/>
+                    <FormHelperText color="rgba(255, 255, 255, 0.5)">What does your Twur look like? This will be used to generate their profile picture.</FormHelperText>
                 </div>
-                <Input type="submit" borderColor="black" className="mt-6 hover:cursor-pointer"/>
+                <Input type="submit" border="none" color="white" fontWeight="semibold" background="rgb(29 78 216)" className="mt-6 hover:cursor-pointer"/>
             </FormControl>
 
         </form>

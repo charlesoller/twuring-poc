@@ -6,11 +6,19 @@ export interface PostInterface {
     image_url?: string;
     likes: number;
     dislikes: number;
-    comments: [];
+    comments: string[];
 }
 
 export interface TwurInterface {
     _id: string;
+    name: string;
+    user_name: string;
+    description: string;
+    appearance: string;
+    profile_pic?: string;
+}
+
+export interface TwurCreateInterface {
     name: string;
     user_name: string;
     description: string;

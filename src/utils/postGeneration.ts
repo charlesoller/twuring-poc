@@ -1,8 +1,8 @@
 // Functions
 import { generateImage } from "./imageGeneration"
-import { createPost } from "../backend/api"
-import { commands } from "./commands"
-import { getRandomIndex, parseToObject, refreshPage, uploadFile, createPostImageFileFromBlob } from "./helper"
+import { createPost, updateTwurPosts } from "../backend/api"
+import { commands } from "./prompting/commands"
+import { getRandomIndex, parseToObject, uploadFile, createPostImageFileFromBlob } from "./helper"
 import { processCommand } from "./textGeneration"
 import { getTwurs } from "../backend/api"
 import { createInstructions } from "./prompting/createInstructions"
@@ -21,12 +21,18 @@ const generateTextPost = async(text: string, user_id: string): Promise<object> =
     const data = {
       "type": "text",
       user_id,
-      text
+      text,
+      likes: 0,
+      dislikes: 0,
+      comments: []
     }
 
     try {
       const res = await createPost(data)
-      return res
+      const post = await res.json()
+      await updateTwurPosts(user_id, post._id)
+
+      return post
     } catch (e: any) {
       throw new Error(e.message)
     }
@@ -37,8 +43,9 @@ const generateImagePost = async(prompt: string, user_id: string): Promise<object
 
     try {
       const blob = await generateImage(prompt)
-      const file = createPostImageFileFromBlob(blob, nanoid())
-      const image_url = `https://twuring.s3.amazonaws.com/${user_id}/${file.name}`
+      const name = `${user_id}/${nanoid()}`
+      const file = createPostImageFileFromBlob(blob, name)
+      const image_url = `https://twuring.s3.amazonaws.com/${file.name}`
       try {
         await uploadFile(file)
 
@@ -47,11 +54,18 @@ const generateImagePost = async(prompt: string, user_id: string): Promise<object
           "type": "image",
           user_id,
           prompt,
-          image_url
+          image_url,
+          likes: 0,
+          dislikes: 0,
+          comments: []
         }
 
         const res = await createPost(data)
-        return res
+        const post = await res.json()
+        await updateTwurPosts(user_id, post._id)
+
+        // Before returning in each one it should add to the twur's posts array
+        return post
 
       } catch (e: any) {
         throw new Error(e.message)
@@ -66,9 +80,9 @@ const generateCaptionedImagePost = async(prompt: string, text: string, user_id: 
 
   try {
     const blob = await generateImage(prompt)
-    // Currently nanoid is being used so that there isn't url overlap to solve the repeating images issue, but somehow I should really be prefetching the object id
-    const file = createPostImageFileFromBlob(blob, nanoid())
-    const image_url = `https://twuring.s3.amazonaws.com/${user_id}/${file.name}`
+    const name = `${user_id}/${nanoid()}`
+    const file = createPostImageFileFromBlob(blob, name)
+    const image_url = `https://twuring.s3.amazonaws.com/${file.name}`
 
     try {
       await uploadFile(file)
@@ -79,11 +93,17 @@ const generateCaptionedImagePost = async(prompt: string, text: string, user_id: 
         user_id,
         text,
         prompt,
-        image_url
+        image_url,
+        likes: 0,
+        dislikes: 0,
+        comments: []
       }
 
       const res = await createPost(data)
-      return res
+      const post = await res.json()
+      await updateTwurPosts(user_id, post._id)
+
+      return post
 
     } catch (e: any) {
       throw new Error(e.message)
@@ -97,15 +117,20 @@ const determineAction = async(obj: AIResponse, id: string): Promise<object> => {
     // Determines what action should be taken given the input
     console.log("Executing...")
     const { action, prompt, text } = obj //action is to determine which to call, prompt is for creating images, text is directly put on post for text/captions
-    if (action === "generatePost"){
-      return await generateTextPost(text, id)
-    } else if (action === "generateImagePost"){
-      return await generateImagePost(prompt, id)
-    } else if (action === "generateCaptionedImagePost"){
-      return await generateCaptionedImagePost(prompt, text, id)
-    } else {
-      throw new Error("Invalid Action.")
+    try {
+      if (action === "generatePost"){
+        return await generateTextPost(text, id)
+      } else if (action === "generateImagePost"){
+        return await generateImagePost(prompt, id)
+      } else if (action === "generateCaptionedImagePost"){
+        return await generateCaptionedImagePost(prompt, text, id)
+      } else {
+        throw new Error("Invalid Action.")
+      }
+    } catch (e: any) {
+      throw new Error(e.message)
     }
+
 }
 
 const executePost = async(instructions: string, command: string, id: string): Promise<undefined> => {
@@ -115,7 +140,6 @@ const executePost = async(instructions: string, command: string, id: string): Pr
   try {
     const obj = parseToObject(output) // returns obj in format: { action: ...., text?: ...., prompt?: .... }
     await determineAction(obj, id)
-    refreshPage() //This is purely for dev purposes, in production the page should NOT refresh after each post
   } catch (e: any) {
     throw new Error(e.message)
   }
@@ -132,13 +156,15 @@ export const runSim = async(delay: number): Promise<undefined> => {
   try {
     const twur = await getRandomTwur()
     console.log("THE CHOSEN TWUR: ", twur.name)
+    const command = getRandomCommand()
     const instructions = createInstructions(twur.description)   // Formats twurs description for prompting chat model
-    await executePost(instructions, commands[0], twur._id)
+    await executePost(instructions, command, twur._id)
   } catch (e: any) {
     console.error(e.message)
   }
 
   await timeout(delayInMs)
+  // refreshPage() //This is purely for dev purposes, in production the page should NOT refresh after each post
   runSim(delay)
 }
 
@@ -147,4 +173,8 @@ const getRandomTwur = async(): Promise<TwurInterface> => {
   const twurs = await getTwurs()
   const ind = getRandomIndex(twurs)
   return twurs[ind]
+}
+
+const getRandomCommand = (): string => {
+  return commands[getRandomIndex(commands)]
 }
