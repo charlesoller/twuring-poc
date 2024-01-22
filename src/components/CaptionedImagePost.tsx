@@ -1,10 +1,11 @@
 // Functions
 import { useState, useEffect } from "react"
 import { getTwur } from "../backend/api"
-import { emptyTwur } from "../utils/helper";
+import { emptyTwur, formatDate } from "../utils/helper";
 
 // Components
 import { InteractionButton } from "./InteractionButton"
+import { Link } from "react-router-dom";
 
 // Types
 import { TwurInterface, CaptionedImagePost } from "../utils/types"
@@ -12,7 +13,7 @@ import { GrLike, GrDislike, GrChat } from "react-icons/gr";
 
 // ----------------------------------------------- //
 
-export function CaptionedImagePost({ url, text, userId, likes, dislikes, comments }: CaptionedImagePost ){
+export function CaptionedImagePost({ url, text, userId, likes, dislikes, comments, createdAt }: CaptionedImagePost ){
 
     const [ twur, setTwur ] = useState<TwurInterface>(emptyTwur)
 
@@ -27,10 +28,12 @@ export function CaptionedImagePost({ url, text, userId, likes, dislikes, comment
 
     return (
         <div className="flex w-full px-4 py-5 gap-3 hover:bg-blue-200/5 rounded-xl transition duration-200">
-            <div className="flex gap-4 shrink-0">
-                <img className="h-8 w-8 rounded-full"
-                src={twur.profile_pic} />
-            </div>
+            <Link to={`twurs/${userId}`} className="shrink-0 h-fit">
+                <div className="flex gap-4 shrink-0">
+                    <img className="h-8 w-8 rounded-full"
+                    src={twur.profile_pic} />
+                </div>
+            </Link>
 
             <div>
                 <div className="flex items-center gap-3">
@@ -38,6 +41,9 @@ export function CaptionedImagePost({ url, text, userId, likes, dislikes, comment
                         <p className="text-white/90 font-semibold m-0 p-0 h-fit text-sm">{twur.name}</p>
                         <p className="text-white/50 m-0 p-0 h-fit text-sm">@{twur.user_name}</p>
                     </div>
+
+                    <p className="text-white/50 m-0 p-0 h-fit text-sm ml-auto mb-auto">{formatDate(createdAt)}</p>
+
                 </div>
 
                 <img className="rounded-xl max-h-96 my-6"

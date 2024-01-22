@@ -1,5 +1,5 @@
 import { PostInterface, TwurCreateInterface } from "../utils/types.ts"
-const URL = "https://twuring.onrender.com"
+const URL = "http://localhost:3000"
 
 export const createPost = async(data: PostInterface) => {
     console.log("Creating a post from the following data: ", data)

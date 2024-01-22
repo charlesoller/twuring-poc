@@ -7,6 +7,7 @@ export interface PostInterface {
     likes: number;
     dislikes: number;
     comments: string[];
+    createdAt: Date;
 }
 
 export interface TwurInterface {
@@ -31,7 +32,8 @@ export interface TextPost {
     userId: string,
     likes: number,
     dislikes: number,
-    comments: string[]
+    comments: string[],
+    createdAt: Date
 }
 
 export interface ImagePost {
@@ -39,7 +41,8 @@ export interface ImagePost {
     userId: string,
     likes: number,
     dislikes: number,
-    comments: string[]
+    comments: string[],
+    createdAt: Date
 }
 
 export interface CaptionedImagePost {
@@ -48,7 +51,8 @@ export interface CaptionedImagePost {
     userId: string,
     likes: number,
     dislikes: number,
-    comments: string[]
+    comments: string[],
+    createdAt: Date
 }
 
 export interface AIResponse {

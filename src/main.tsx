@@ -15,6 +15,8 @@ import {
   // theme as chakraTheme,
   ChakraProvider
 } from '@chakra-ui/react'
+import { ExploreTwurs } from './routes/ExploreTwurs.tsx'
+import { TwurProfile } from './routes/TwurProfile.tsx'
 
 // const { Tooltip, Modal } = chakraTheme.components
 
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <App />
+      },
+      {
+        path: "/twurs",
+        element: <ExploreTwurs />
+      },
+      {
+        path: "/twurs/:id",
+        element: <TwurProfile />
       },
       {
         path: "*",

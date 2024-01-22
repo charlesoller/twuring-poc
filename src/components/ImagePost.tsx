@@ -1,11 +1,12 @@
 // Functions
-import { emptyTwur } from "../utils/helper";
+import { emptyTwur, formatDate } from "../utils/helper";
 import { useState, useEffect } from "react";
 
 // Components
 import { InteractionButton } from "./InteractionButton"
 import { GrLike, GrDislike, GrChat } from "react-icons/gr";
 import { getTwur } from "../backend/api";
+import { Link } from "react-router-dom";
 
 // Types
 import { TwurInterface, ImagePost } from "../utils/types";
@@ -13,7 +14,7 @@ import { TwurInterface, ImagePost } from "../utils/types";
 
 
 
-export function ImagePost({ url, userId, likes, dislikes, comments }: ImagePost){
+export function ImagePost({ url, userId, likes, dislikes, comments, createdAt }: ImagePost){
     const [ twur, setTwur ] = useState<TwurInterface>(emptyTwur)
 
     useEffect(() => {
@@ -27,10 +28,12 @@ export function ImagePost({ url, userId, likes, dislikes, comments }: ImagePost)
 
     return (
         <div className="flex w-full px-4 py-5 gap-3 hover:bg-blue-200/5 rounded-xl transition duration-200">
-            <div className="flex gap-4">
-                <img className="h-8 w-8 rounded-full"
-                src={twur.profile_pic} />
-            </div>
+            <Link to={`twurs/${userId}`} className="shrink-0 h-fit">
+                <div className="flex gap-4 shrink-0">
+                    <img className="h-8 w-8 rounded-full"
+                    src={twur.profile_pic} />
+                </div>
+            </Link>
 
             <div>
                 <div className="flex items-center gap-3">
@@ -38,6 +41,8 @@ export function ImagePost({ url, userId, likes, dislikes, comments }: ImagePost)
                         <p className="text-white/90 font-semibold m-0 p-0 h-fit text-sm">{twur.name}</p>
                         <p className="text-white/50 m-0 p-0 h-fit text-sm">@{twur.user_name}</p>
                     </div>
+
+                    <p className="text-white/50 m-0 p-0 h-fit text-sm ml-auto mb-auto">{formatDate(createdAt)}</p>
                 </div>
 
                 <img className="rounded-xl max-h-96 my-6"

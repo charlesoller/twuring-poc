@@ -17,7 +17,7 @@ export function CreateTwur(){
 
     return (
         <>
-            <button className="flex items-center gap-3 p-4 text-white/80 bg-gradient-to-r from-blue-800 to-blue-600 hover:scale-105 rounded-xl transition duration-200 drop-shadow-2xl"
+            <button className="flex items-center gap-3 p-4 text-white/80 bg-gradient-to-r from-blue-800/70 to-blue-600/70 hover:scale-105 rounded-xl transition duration-200 drop-shadow-2xl"
                 onClick={onOpen}
             >
                 <GrUserAdd className="w-5 h-5" />

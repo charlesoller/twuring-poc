@@ -79,3 +79,20 @@ export const emptyTwur = {
   description: "",
   appearance: ""
 }
+
+export const formatDate = (createdAt: Date) => {
+  const timeAtCreation = new Date(createdAt).getTime()
+  const currDate = new Date().getTime()
+  const diff = currDate - timeAtCreation
+  const timeInMinutes = Math.floor(diff / 60000)
+  const timeInHours = Math.floor(timeInMinutes / 60)
+  const timeInDays = Math.floor(timeInHours / 24)
+
+  if(timeInMinutes < 60){
+      return `${timeInMinutes}m ago`
+  } else if (timeInHours < 24) {
+      return `${timeInHours}h ago`
+  } else {
+      return `${timeInDays}d ago`
+  }
+}

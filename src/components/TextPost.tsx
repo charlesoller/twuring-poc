@@ -1,7 +1,7 @@
 // Functions
 import { useState, useEffect } from "react";
 import { getTwur } from "../backend/api";
-import { emptyTwur } from "../utils/helper";
+import { emptyTwur, formatDate } from "../utils/helper";
 
 // Components
 import { GrLike, GrDislike, GrChat } from "react-icons/gr";
@@ -9,8 +9,10 @@ import { InteractionButton } from "./InteractionButton";
 
 // Types
 import { TwurInterface, TextPost } from "../utils/types";
+import { Link } from "react-router-dom";
 
-export function TextPost({ text, userId, likes, dislikes, comments }: TextPost ){
+
+export function TextPost({ text, userId, likes, dislikes, comments, createdAt }: TextPost ){
 
     const [ twur, setTwur ] = useState<TwurInterface>(emptyTwur)
 
@@ -25,8 +27,13 @@ export function TextPost({ text, userId, likes, dislikes, comments }: TextPost )
 
     return (
         <div className="flex w-full px-4 py-5 gap-3 hover:bg-blue-200/5 rounded-xl transition duration-200">
-            <img className="h-8 w-8 rounded-full"
-            src={twur.profile_pic} />
+            <Link to={`twurs/${userId}`} className="shrink-0 h-fit">
+                <div className="flex gap-4 shrink-0">
+                    <img className="h-8 w-8 rounded-full"
+                    src={twur.profile_pic} />
+                </div>
+            </Link>
+            
             <div>
                 <div className="flex items-center gap-3">
 
@@ -34,7 +41,10 @@ export function TextPost({ text, userId, likes, dislikes, comments }: TextPost )
                         <p className="text-white/90 font-semibold m-0 p-0 h-fit text-sm">{twur.name}</p>
                         <p className="text-white/50 m-0 p-0 h-fit text-sm">@{twur.user_name}</p>
                     </div>
+
+                    <p className="text-white/50 m-0 p-0 h-fit text-sm ml-auto mb-auto">{formatDate(createdAt)}</p>
                 </div>
+
                 <p className="text-white/90 text-sm leading-6 mb-4">{ text }</p>
                 <div className="flex gap-4 mt-2">
                     <InteractionButton icon={<GrLike />}>
